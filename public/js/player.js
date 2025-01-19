@@ -1,12 +1,12 @@
 import ASS from "/js/ass.min.js";
 
 export class Player {
-    constructor(video_container) {
-        create_player(video_container);
+    constructor(video_container, stream_url, subtitles) {
+        create_player(video_container, stream_url, subtitles);
     }
 }
 
-function create_player(base_node) {
+function create_player(base_node, stream_url, subtitles) {
     const video = elem_class("video", "video");
     const ass = document.createElement("div");
     ass.setAttribute("style", "position: absolute; top: 0; left: 0;");
@@ -16,18 +16,12 @@ function create_player(base_node) {
 
     base_node.append(video, ass, player_state, controls);
 
-    const url = "/generated.mpd";
     const player = dashjs.MediaPlayer().create();
-    player.initialize(video, url, true);
+    player.initialize(video, stream_url, true);
 
-    fetch("/subtitles.ass")
-        .then((res) => res.text())
-        .then(
-            (subtitles) =>
-                new ASS(subtitles, video, {
-                    container: ass,
-                }),
-        );
+    new ASS(subtitles, video, {
+        container: ass,
+    });
 
     init_player(base_node, video);
 }

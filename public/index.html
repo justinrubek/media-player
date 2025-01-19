@@ -8,7 +8,10 @@
     <script defer type="module">
         import {Player} from "/js/player.js";
         const video_container = document.querySelector("#video-container");
-        const p = new Player(video_container);
+        const url = "/media/episode0/generated.mpd";
+        const subtitles = await fetch("/media/episode0/subtitles.ass")
+            .then((res) => res.text());
+        const p = new Player(video_container, url, subtitles);
     </script>
 </head>
 
